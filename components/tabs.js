@@ -25,25 +25,25 @@ const Tabs = () => {
                 ...styles.shadow
             }
         }}>
-      <Tab.Screen name="Übersicht" component={Overview} options={{
+      <Tab.Screen name="Monate" component={Overview} options={{
           tabBarIcon: ({focused}) => (
             <View style={{alignItems: 'center', justifyContent: 'center', width: 150}}> 
                 <Icon name="list" color={focused ? config_global.color_primary : '#748c94'} size={35} iconStyle={{
                     width: 25,
                     height: 25
                 }}/>
-                <Text style={{color: focused ? config_global.color_primary : '#748c94', fontSize: 18}}>Übersicht</Text>
+                <Text style={{color: focused ? config_global.color_primary : '#748c94', fontSize: 18}}>Monate</Text>
             </View>
           ),
       }} />
-      <Tab.Screen name="Fernsteuerung" component={Overview} options={{
+      <Tab.Screen name="Zusammenfassung" component={Overview} options={{
           tabBarIcon: ({focused}) => (
             <View style={{alignItems: 'center', justifyContent: 'center', width: 150}}>
-                <Icon name="settings" color={focused ? config_global.color_primary : '#748c94'} size={35} iconStyle={{
+                <Icon name="euro" color={focused ? config_global.color_primary : '#748c94'} size={35} iconStyle={{
                     width: 25,
                     height: 25
                 }}/>
-                <Text style={{color: focused ? config_global.color_primary : '#748c94', fontSize: 18}}>Fernsteuerung</Text>
+                <Text style={{color: focused ? config_global.color_primary : '#748c94', fontSize: 18}}>Report</Text>
             </View>
           ),
       }} />
@@ -55,6 +55,17 @@ const Tabs = () => {
                     height: 25
                 }}/>
                 <Text style={{color: focused ? config_global.color_primary : '#748c94', fontSize: 18}}>Status</Text>
+            </View>
+          ),
+      }} />
+      <Tab.Screen name="Fernsteuerung" component={Overview} options={{
+          tabBarIcon: ({focused}) => (
+            <View style={{alignItems: 'center', justifyContent: 'center', width: 150}}>
+                <Icon name="settings" color={focused ? config_global.color_primary : '#748c94'} size={35} iconStyle={{
+                    width: 25,
+                    height: 25
+                }}/>
+                <Text style={{color: focused ? config_global.color_primary : '#748c94', fontSize: 18}}>Fernsteuerung</Text>
             </View>
           ),
       }} />

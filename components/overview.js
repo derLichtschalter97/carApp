@@ -3,26 +3,26 @@ import { FlatList, SafeAreaView, StatusBar, StyleSheet, Text, TouchableOpacity, 
 import { Icon } from 'react-native-elements';
 import { widthPercentageToDP as wp} from 'react-native-responsive-screen';
 import { inject, observer } from 'mobx-react'
-import { sortByProperty, generateBadge} from "../helpers/helpers";
+import { sortByProperty, calculateKM, calculateOver} from "../helpers/helpers";
 import Orientation from 'react-native-orientation';
 import { format } from "date-fns";
 import * as Progress from 'react-native-progress';
 
 
  const data = require('../data/data')
+ const settings = require('../data/settings')
  const config_global = require("../config/global.json")
  
  
 
-const Item = ({ item, onPress}) => (
-  <TouchableOpacity onPress={onPress} style={styles.item}>
+const Item = ({ item, onPress, backgroundColor}) => (
+  <TouchableOpacity onPress={onPress} style={[styles.item, backgroundColor]}>
     <Text style={styles.title}>{item.name}</Text>
     <View style={styles.progress}>
-      <Progress.Bar style={styles.progressBar} progress={0.3} height={30} width={null}/>
-      <Text style={styles.progressText}>100 / 1250km</Text>
+      <Progress.Bar style={styles.progressBar} progress={item.percent} height={30} width={null}/>
+      <Text style={styles.progressText}>{item.drived} / {settings.global.monthlyKM}km</Text>
       <Icon
           raised
-          style={styles.button}
           name='analytics'
           type='material'
           color='blue'
@@ -38,8 +38,10 @@ const Overview = (props) => {
   const [months, setMonths] = useState(null)
 
   useEffect(() =>{
-    const sorted = sortByProperty(sortType, data.months)
-    setMonths(sorted)
+    let daten = sortByProperty(sortType, data.months)
+    daten = calculateKM(daten, data.days)
+    daten = calculateOver(daten, settings.global.monthlyKM)
+    setMonths(daten)
     Orientation.unlockAllOrientations();
   })
 
@@ -49,21 +51,22 @@ const Overview = (props) => {
   }
 
   const renderItem = ({item}) => {
-    let selected = "black";
-    let unselected = "white";
+    let backgroundColor = "#88B04B";
 
     //liefert Farbe vom Item zurück
     const getColor = (item) => {
+      if(item.over !== 0){
+        backgroundColor = "#FF6F61"
+      }
     }
 
     getColor(item);
-    const backgroundColor = item.id === selectedId ? selected : unselected;
-    const color = item.id === selectedId ? 'white' : 'black';
   
       return (
       <Item
         item={item}
         onPress={() => itemClick(item)}
+        backgroundColor={{backgroundColor}}
       />
     );
   };
@@ -123,6 +126,8 @@ const styles = StyleSheet.create({
     elevation: 5
   },
   progress:{
+    padding: 5,
+    backgroundColor: "white",
     alignItems: 'center',
     display: 'flex',
     flexDirection: 'row',
@@ -136,20 +141,16 @@ const styles = StyleSheet.create({
   progressText:{
     fontSize: 22,
     paddingLeft: 20,
+    paddingRight: 20,
   },
   button: {
-    paddingLeft: 20,
-    shadowColor: '#7F5DF0',
-        shadowOffset: {
-            width: 0,
-            height: 10,
-        },
-        shadowOpacity: 0.25,
-        shadowRadius: 3.5,
-        elevation: 5
+    paddingLeft: 30,
   },
   title: {
+    fontWeight: 'bold',
+    color: "white",
     fontSize: 22,
+    fontStyle: "bold"
   },
 });
 

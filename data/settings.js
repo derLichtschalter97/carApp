@@ -1,6 +1,6 @@
-const settings = {
+const global = {
     monthlyKM: 1250,
     extraKM: 2500,
 }
 
-exports.settings = settings
+exports.global = global
